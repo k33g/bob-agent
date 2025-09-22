@@ -1,0 +1,11 @@
+registry:
+
+  mcp-snippets:
+    remote:
+      url: "http://mcp-snippets:6060/mcp"
+      transport_type: http
+
+  mcp-files:
+    remote:
+      url: "http://mcp-files:6060/mcp"
+      transport_type: http

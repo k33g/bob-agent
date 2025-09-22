@@ -1,0 +1,79 @@
+# docker compose up --build --no-log-prefix
+services:
+
+  mcp-gateway:
+    # mcp-gateway secures your MCP servers
+    image: docker/mcp-gateway:latest
+    ports:
+      - 9011:9011
+    #use_api_socket: true
+    command:
+      - --port=9011
+      - --transport=streaming
+      - --verbose
+      - --catalog=/config/catalog.yaml
+      - --servers=mcp-snippets,mcp-files
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./config:/config
+    depends_on:
+      mcp-snippets:
+        condition: service_healthy
+      mcp-rag:
+        condition: service_healthy
+      mcp-files:
+        condition: service_healthy
+
+
+  mcp-snippets:
+    image: k33g/mcp-snippets-server:0.0.4
+    environment:
+      MCP_HTTP_PORT: 6060
+      LIMIT: 0.6
+      MAX_RESULTS: 3
+      JSON_STORE_FILE_PATH: store/rag-memory-store.json
+      DELIMITER: ----------
+    
+    volumes:
+      - ./snippets:/app/snippets
+      - ./store/snippets:/app/store
+    models:
+      mxbai-embed:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: EMBEDDING_MODEL
+
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:6060/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+
+  mcp-files:
+    image: k33g/mcp-files-server:0.0.1
+    # ports:
+    #   - 9090:6060
+    environment:
+      - MCP_HTTP_PORT=6060
+      - LOCAL_WORKSPACE_FOLDER=/app/workspace
+    volumes:
+      - ./workspace:/app/workspace
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:6060/health"]
+      interval: 30s
+      timeout: 30s
+      retries: 5
+      start_period: 40s
+
+models:
+
+  granite-embedding:
+    model: ai/granite-embedding-multilingual:latest
+
+  mxbai-embed:
+    model: ai/mxbai-embed-large
+  
+  # To be sure to download the model before starting `cagent`
+  agent-model:
+    model: hf.co/menlo/jan-nano-gguf:q4_k_m 

@@ -1,1 +1,6 @@
-# bob-agent
+# Bob Agent
+
+```bash
+cagent run bob.yaml
+```
+
