@@ -19,11 +19,8 @@ services:
     depends_on:
       mcp-snippets:
         condition: service_healthy
-      mcp-rag:
-        condition: service_healthy
       mcp-files:
         condition: service_healthy
-
 
   mcp-snippets:
     image: k33g/mcp-snippets-server:0.0.4
@@ -67,9 +64,6 @@ services:
       start_period: 40s
 
 models:
-
-  granite-embedding:
-    model: ai/granite-embedding-multilingual:latest
 
   mxbai-embed:
     model: ai/mxbai-embed-large
