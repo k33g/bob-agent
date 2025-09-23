@@ -2,17 +2,20 @@
 services:
 
   mcp-gateway:
-    # mcp-gateway secures your MCP servers
     image: docker/mcp-gateway:latest
     ports:
       - 9011:9011
-    #use_api_socket: true
+    use_api_socket: true
     command:
       - --port=9011
       - --transport=streaming
       - --verbose
-      - --catalog=/config/catalog.yaml
+      - --catalog=/mcp/catalog.yaml
       - --servers=mcp-snippets,mcp-files
+    configs:
+      - source: catalog.yaml
+        target:
+          /mcp/catalog.yaml
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config:/config
@@ -48,12 +51,10 @@ services:
 
 
   mcp-files:
-    image: k33g/mcp-files-server:0.0.1
-    # ports:
-    #   - 9090:6060
+    image: k33g/mcp-files-server:0.0.2
     environment:
-      - MCP_HTTP_PORT=6060
-      - LOCAL_WORKSPACE_FOLDER=/app/workspace
+      MCP_HTTP_PORT: 6060
+      LOCAL_WORKSPACE_FOLDER: /app/workspace
     volumes:
       - ./workspace:/app/workspace
     healthcheck:
@@ -69,5 +70,23 @@ models:
     model: ai/mxbai-embed-large
   
   # To be sure to download the model before starting `cagent`
-  agent-model:
-    model: hf.co/menlo/jan-nano-gguf:q4_k_m 
+  # agent-model:
+  #   model: hf.co/menlo/jan-nano-gguf:q8_0
+  #   #model: hf.co/menlo/jan-nano-gguf:q4_k_m 
+  #   #model: hf.co/menlo/lucy-gguf:q8_0 
+
+
+configs:
+  catalog.yaml:
+    content: |
+      registry:
+
+        mcp-snippets:
+          remote:
+            url: "http://mcp-snippets:6060/mcp"
+            transport_type: http
+
+        mcp-files:
+          remote:
+            url: "http://mcp-files:6060/mcp"
+            transport_type: http

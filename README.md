@@ -1,5 +1,5 @@
 # Bob Agent
-> Snippets Bot
+> The Snippets Agent
 
 ```bash
 cagent run bob.yaml

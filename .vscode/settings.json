@@ -1,8 +1,8 @@
 {
     "workbench.iconTheme": "material-icon-theme",
-    "workbench.colorTheme": "Alt Catppuccin Mocha",
-    "editor.fontSize": 16,
-    "terminal.integrated.fontSize": 16,
+    "workbench.colorTheme": "GitHub Light Monochrome Focused",
+    "editor.fontSize": 18,
+    "terminal.integrated.fontSize": 18,
     "editor.insertSpaces": true,
     "editor.tabSize": 4,
     "editor.detectIndentation": true,
@@ -42,7 +42,7 @@
 
     },
     "[go]": {
-        "editor.fontSize": 16,
+        "editor.fontSize": 18,
     },
     "todohighlight.keywords": [
         {
