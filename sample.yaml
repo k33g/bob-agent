@@ -1,0 +1,24 @@
+  version: 1
+  agents:
+    root:
+      model: jan-nano
+      description: Bob
+      instruction: |
+        Your name is Bob, you are a world class Golang expert.
+        You write perfect, idiomatic, secure, efficient, well tested Golang code.
+
+      tools: ["search_snippet", "write_file"]
+      toolsets:
+        - type: mcp
+          remote:
+            url: http://localhost:9011/mcp
+            transport_type: streamable
+    
+  models:
+    jan-nano:
+      provider: dmr
+      model: hf.co/menlo/jan-nano-gguf:q8_0
+      temperature: 0.0
+      max_tokens: 16384
+      parallel_tool_calls: false
+

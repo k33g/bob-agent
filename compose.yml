@@ -2,7 +2,7 @@
 services:
 
   mcp-gateway:
-    image: docker/mcp-gateway:v1
+    image: docker/mcp-gateway:v2
     ports:
       - 9011:9011
     use_api_socket: true
@@ -11,6 +11,7 @@ services:
       - --transport=streaming
       - --verbose
       - --catalog=/mcp/catalog.yaml
+      #- --servers=mcp-files
       - --servers=mcp-snippets,mcp-files
     configs:
       - source: catalog.yaml
@@ -26,7 +27,7 @@ services:
         condition: service_healthy
 
   mcp-snippets:
-    image: k33g/mcp-snippets-server:0.0.4
+    image: k33g/mcp-snippets-server:0.0.5
     environment:
       MCP_HTTP_PORT: 6060
       LIMIT: 0.6
@@ -51,7 +52,7 @@ services:
 
 
   mcp-files:
-    image: k33g/mcp-files-server:0.0.2
+    image: k33g/mcp-files-server:0.0.3
     environment:
       MCP_HTTP_PORT: 6060
       LOCAL_WORKSPACE_FOLDER: /app/workspace

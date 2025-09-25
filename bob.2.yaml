@@ -1,9 +1,9 @@
   version: 1
-  # cagent run sam.yaml
+  # cagent run bob.2.yaml
   agents:
     root:
       model: jan-nano
-      description: Sam, main agent, uses MCP tools
+      description: Main agent, uses MCP tools
       instruction: |
         Use tools to accomplish the task, then transfer the info to the helper agent (Bob).
 
