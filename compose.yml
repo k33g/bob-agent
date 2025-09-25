@@ -2,7 +2,7 @@
 services:
 
   mcp-gateway:
-    image: docker/mcp-gateway:latest
+    image: docker/mcp-gateway:v1
     ports:
       - 9011:9011
     use_api_socket: true
@@ -80,7 +80,6 @@ configs:
   catalog.yaml:
     content: |
       registry:
-
         mcp-snippets:
           remote:
             url: "http://mcp-snippets:6060/mcp"
